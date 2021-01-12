@@ -1,35 +1,44 @@
 #!/usr/bin/env Rscript
 
-# Downloaded and unzipped the dataset needed for the course. 
-# The datasets is placed in the same directory with the run_analysis.R script, under the dataset directory. 
 
-## Load the nesessairy libraries
+## Load the nesesairy libraries
 library(data.table)
 library(dplyr)
 
-## get the current date of the dataset downloaded just for future reference if needed. 
-dateDownload <- date()
 
 ## Start reading files
 setwd("C:/Users/skarpath/Documents/Rproject")
 
+## get the current date of the dataset downloaded just for future reference if needed. 
+dateDownload <- date()
+
+# Download the datasets from the link provided and unzip them
+datasetlink <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+zipFile <- "dataset.zip"
+if (!file.exists(zipFile)){
+  download.file(datasetlink, destfile = zipFile, mode='wb')
+}
+if (!file.exists("./UCI HAR Dataset")){
+  unzip(zipFile)
+}
+
 ## Read the features files test and train to a dataframe
-featuresTest <- read.table("./dataset/test/X_test.txt", header = F)
-featuresTrain <- read.table("./dataset/train/X_train.txt", header = F)
+featuresTest <- read.table("./UCI HAR Dataset/test/X_test.txt", header = F)
+featuresTrain <- read.table("./UCI HAR Dataset/train/X_train.txt", header = F)
 
 ## Read the features names test and train to a dataframe
-featuresNames <- read.table("./dataset/features.txt", header = F)
+featuresNames <- read.table("./UCI HAR Dataset/features.txt", header = F)
 
 ## Read the activity files test and train to a dataframe
-activityTest <- read.table("./dataset/test/y_test.txt", header = F)
-activityTrain <- read.table("./dataset/train/y_train.txt", header = F)
+activityTest <- read.table("./UCI HAR Dataset/test/y_test.txt", header = F)
+activityTrain <- read.table("./UCI HAR Dataset/train/y_train.txt", header = F)
 
 ## Read the activity labels test and train to a dataframe
-activityLabels <- read.table("./dataset/activity_labels.txt", header = F)
+activityLabels <- read.table("./UCI HAR Dataset/activity_labels.txt", header = F)
 
 ## Read the subject files test and train to a dataframe
-subjectTest <- read.table("./dataset/test/subject_test.txt", header = F)
-subjectTrain <- read.table("./dataset/train/subject_train.txt", header = F)
+subjectTest <- read.table("./UCI HAR Dataset/test/subject_test.txt", header = F)
+subjectTrain <- read.table("./UCI HAR Dataset/train/subject_train.txt", header = F)
 
 # Step1 Merges the training and the test sets to create one data set. Merge the test & train dataframes for the features 
 featuresData <- rbind(featuresTest, featuresTrain)
@@ -67,8 +76,8 @@ names(reducedData) <- gsub("^f", "frequency_", names(reducedData))
 names(reducedData) <- gsub("Gyro", "gyroscope_", names(reducedData))
 names(reducedData) <- gsub("Mag", "magnitude_", names(reducedData))
 names(reducedData) <- gsub("^t", "time_", names(reducedData))
-names(reducedData) <- gsub("-std()", "STD", names(reducedData))
-names(reducedData) <- gsub("-mean()", "MEAN", names(reducedData))
+names(reducedData) <- gsub("-std.+-", "STD", names(reducedData))
+names(reducedData) <- gsub("-mean.+-", "MEAN", names(reducedData))
 
 
 

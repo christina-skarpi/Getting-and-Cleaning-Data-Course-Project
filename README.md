@@ -1,17 +1,27 @@
 #!/usr/bin/env Rscript
 
-# Downloaded and unzipped the dataset needed for the course. 
-# The datasets is placed in the same directory with the run_analysis.R script, under the dataset directory. 
 
-## Load the nesessairy libraries
+## Load the nesesairy libraries
 library(data.table)
 library(dplyr)
+
+
+## Start reading files
+setwd("C:/Users/skarpath/Documents/Rproject")
 
 ## get the current date of the dataset downloaded just for future reference if needed. 
 dateDownload <- date()
 
-## Start reading files
-setwd("C:/Users/skarpath/Documents/Rproject")
+# Download the datasets from the link provided and unzip them
+datasetlink <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+zipFile <- "dataset.zip"
+if (!file.exists(zipFile)){
+  download.file(datasetlink, destfile = zipFile, mode='wb')
+}
+if (!file.exists("./UCI HAR Dataset")){
+  unzip(zipFile)
+}
+
 
 ## Read the features files test and train to a dataframe
 featuresTest <- read.table("./dataset/test/X_test.txt", header = F)
